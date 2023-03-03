@@ -1,16 +1,14 @@
-import { ThemeProvider } from 'styled-components';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import Header from './components/Header';
-import Main from './components/Main';
+import React from 'react';
+import GameBoard from './components/GameBoard';
+import MenuGenerator from './components/MenuGenerator';
 
-function App() {
+const App = () => {
   return (
-      <DndProvider backend={HTML5Backend}>
-        <Header />
-        <Main />
-      </DndProvider>
+    <div>
+      <GameBoard />
+      <MenuGenerator />
+    </div>
   );
-}
+};
 
 export default App;
