@@ -1,73 +1,49 @@
 import React from 'react';
-import { Paper, Typography, IconButton } from '@mui/material';
-import { Close, Maximize, Minimize } from '@mui/icons-material';
-import { useDrag, useDrop } from 'react-dnd';
-import NinjaIcon from './NinjaIcon';
 import styled from 'styled-components';
+import { Typography, Button } from '@mui/material';
 
-const StyledPaper = styled(Paper)`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 300px;
-  height: 400px;
-  z-index: 999;
-`;
+const StyledWindow = styled.div(({ theme }) => ({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '300px',
+  padding: '20px',
+  backgroundColor: theme.palette.background.paper,
+  border: `2px solid ${theme.palette.secondary.main}`,
+  borderRadius: '5px',
+  zIndex: '100',
+}));
 
-const TitleBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
+const NinjaIcon = styled.img(({ theme }) => ({
+  width: '100px',
+  height: '100px',
+  objectFit: 'cover',
+  border: `2px solid ${theme.palette.secondary.main}`,
+  borderRadius: '50%',
+  margin: '10px',
+}));
 
-const Content = styled.div`
-  flex: 1;
-  overflow: auto;
-`;
+const NinjaMenuWindow = ({ ninja, setIsOpen }) => {
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
-function NinjaMenuWindow({ ninjas, onDrop, onClose, onMinimize, onMaximize, isMaximized, title }) {
-  const [{ isDragging }, dragRef] = useDrag({
-    type: 'NINJA_ICON',
-    collect: monitor => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
-  const [{ canDrop, isOver }, dropRef] = useDrop({
-    accept: 'NINJA_ICON',
-    drop: item => onDrop(item.id),
-    collect: monitor => ({
-      canDrop: monitor.canDrop(),
-      isOver: monitor.isOver(),
-    }),
-  });
-
-
-  const opacity = isDragging ? 0.5 : 1;
-  const backgroundColor = canDrop && isOver ? 'lightgray' : 'white';
-  const display = isMaximized ? 'none' : 'flex'; // Change second to 'none' to hide window when not maximized
   return (
-    <StyledPaper style={{ opacity, backgroundColor, display }} ref={dropRef}>
-      <TitleBar>
-        <Typography variant="h6">{title}</Typography>
-        <div>
-          <IconButton size="small" onClick={onMinimize}>
-            <Minimize />
-          </IconButton>
-          <IconButton size="small" onClick={onMaximize}>
-            {isMaximized ? <Close /> : <Maximize />}
-          </IconButton>
-          <IconButton size="small" onClick={onClose}>
-            <Close />
-          </IconButton>
-        </div>
-      </TitleBar>
-      <Content>
-        {ninjas.map(ninja => (
-            <NinjaIcon key={ninja.id} ninja={ninja} ref={dragRef} />
-        ))}
-      </Content>
-    </StyledPaper>
+    <StyledWindow>
+      <Typography variant="h6">{ninja.name}</Typography>
+      <NinjaIcon src={`images/${ninja.image}`} alt={ninja.name} />
+      <Typography variant="body1">
+        {`Calm: ${ninja.calm} Agility: ${ninja.agility} Preparedness: ${ninja.preparedness} Stealth: ${ninja.stealth}`}
+      </Typography>
+      <Typography variant="body1">{`Health: ${ninja.health} Stamina: ${ninja.stamina} Loyalty: ${ninja.loyalty}`}</Typography>
+      <Typography variant="body1">{`Abilities: ${ninja.abilities.join(', ')}`}</Typography>
+      <Typography variant="body1">{`Inventory: ${ninja.inventory.join(', ')}`}</Typography>
+      <Button variant="contained" onClick={handleClose}>
+        Close
+      </Button>
+    </StyledWindow>
   );
-}
+};
 
 export default NinjaMenuWindow;

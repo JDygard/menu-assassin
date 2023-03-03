@@ -1,17 +1,15 @@
-import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { CssBaseline } from '@mui/material';
-import NinjaManager from './components/NinjaManager';
+import Header from './components/Header';
+import Main from './components/Main';
 
 function App() {
   return (
-    <React.Fragment>
-      <CssBaseline />
       <DndProvider backend={HTML5Backend}>
-        <NinjaManager />
+        <Header />
+        <Main />
       </DndProvider>
-    </React.Fragment>
   );
 }
 
